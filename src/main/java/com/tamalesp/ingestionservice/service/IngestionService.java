@@ -33,19 +33,15 @@ public class IngestionService {
 
         return Flux.fromIterable(logEntries)
                 .flatMap( logEntry -> {
-                    try {
-                        // Serialize logEntry to a json String
-                        String logJson = new ObjectMapper().writeValueAsString(logEntry);
-
-                        // Create the kafka Message with headers
-                        Message<String> kafkaMessage = MessageBuilder
-                                .withPayload(logJson)
+                                            // Create the kafka Message with headers
+                        Message<LogEntry> kafkaMessage = MessageBuilder
+                                .withPayload(logEntry)
                                 .setHeader(KafkaHeaders.KEY, tenantId)
                                 .setHeader(KafkaHeaders.TOPIC, topicName)
                                 .setHeader("correlationId", correlationId)
                                 .build();
 
-                        // Sending message and handling the result
+                                            // Sending message and handling the result
                         return kafkaProducerTemplate.send(topicName, kafkaMessage)
                                 .doOnSuccess(senderResult ->
                                         log.debug("Published log to topic {} on partition {} with offset {}",
@@ -55,11 +51,8 @@ public class IngestionService {
                                                 )
                                         )
                                 .doOnError(e -> log.error("Failed to publish log for tenant {}", tenantId, e));
-                     }catch (JsonProcessingException e) {
-                        log.error("Failed to serialize log entry for tenant {}", tenantId, e);
-                        return Mono.error(e);
-                    }
                 })
                 .then(); //Wait
+
     }
 }

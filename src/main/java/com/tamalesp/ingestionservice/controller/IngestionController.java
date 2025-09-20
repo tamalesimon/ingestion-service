@@ -24,10 +24,9 @@ public class IngestionController {
 
     @PostMapping("/logs")
     public Mono<ResponseEntity<String>> ingestLogs (@Valid @RequestBody Mono<LogBatch> request, Principal principal) {
-
         String tenantId = principal.getName();
         return request
                 .flatMap(req -> ingestionService.processAndPublish(req.getLogs(), tenantId))
-                .thenReturn(ResponseEntity.accepted().body("Logs successfully queued for ingestion"));
+                .then(Mono.just(ResponseEntity.accepted().body("Logs successfully queued for ingestion for "+ tenantId)));
     }
 }

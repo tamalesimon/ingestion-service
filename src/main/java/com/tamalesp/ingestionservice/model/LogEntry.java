@@ -19,7 +19,7 @@ public class LogEntry {
     private String message;
 
     @NotNull
-    private String timeStamp;
+    private String timestamp;
 
     @JsonProperty("metadata")
     private Map<String, Object> metadata;

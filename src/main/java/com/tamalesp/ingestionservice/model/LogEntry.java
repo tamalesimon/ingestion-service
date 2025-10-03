@@ -1,26 +1,25 @@
 package com.tamalesp.ingestionservice.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 
-import java.util.Map;
+
+import java.time.Instant;
+import java.util.UUID;
 
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class LogEntry {
 
-    @NotBlank
-    @JsonProperty("log_level")
-    private String logLevel;
-
-    @NotBlank
+    @Id
+    private UUID id = UUID.randomUUID();
+    private String loglevel;
     private String message;
-
-    @NotNull
-    private String timestamp;
-
-    @JsonProperty("metadata")
-    private Map<String, Object> metadata;
+    private Instant timestamp;
+    private Object metadata;
 }

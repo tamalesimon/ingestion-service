@@ -1,6 +1,7 @@
 package com.tamalesp.ingestionservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.tamalesp.ingestionservice.model.LogEntry;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
@@ -9,7 +10,13 @@ import java.util.Map;
 
 public class CustomLogEntrySerializer implements Serializer<LogEntry> {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
+    public CustomLogEntrySerializer() {
+        objectMapper = new ObjectMapper();
+
+        objectMapper.registerModule(new JavaTimeModule());
+    }
 
     @Override
     public void configure(Map<String, ?> configs, boolean isKey) {

@@ -6,6 +6,10 @@ spring:
     username: myuser
     password: mypassword
     driver-class-name: org.postgresql.Driver
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/mydatabase
+    username: myuser
+    password: mypassword
   jpa:
     hibernate:
       ddl-auto: update
